@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vadla Abhishek | Threat Intelligence & Detection Engineering</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Vadla Abhishek | Cyber Threat Intelligence & Detection Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
-            --bg-base: #020617;
-            --cyber-cyan: #06b6d4;
-            --cyber-blue: #3b82f6;
-            --cyber-purple: #8b5cf6;
-            --cyber-green: #10b981;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --card-glass: rgba(15, 23, 42, 0.65);
-            --card-border: rgba(56, 189, 248, 0.15);
-            --glow: rgba(6, 182, 212, 0.35);
+            --bg-deep: #020617;
+            --neon-cyan: #00f2fe;
+            --neon-blue: #38bdf8;
+            --neon-purple: #a855f7;
+            --neon-green: #10b981;
+            --text-pure: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-panel: rgba(10, 15, 30, 0.65);
+            --border-glow: rgba(0, 242, 254, 0.22);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
-            line-height: 1.6;
-            position: relative;
+            min-height: 100vh;
         }
 
-        /* Interactive Matrix/Grid Canvas */
-        #cyber-canvas {
+        /* 3D WebGL Background */
+        #webgl-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -41,418 +40,426 @@
             pointer-events: none;
         }
 
-        /* Dynamic Cursor Spotlight Effect */
+        /* Ambient Dynamic Cursor Spotlight */
         .spotlight {
             position: fixed;
             top: 0;
             left: 0;
-            width: 600px;
-            height: 600px;
+            width: 650px;
+            height: 650px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, transparent 65%);
             transform: translate(-50%, -50%);
             pointer-events: none;
             z-index: -1;
-            transition: width 0.2s, height 0.2s;
         }
 
         .container {
             max-width: 1050px;
             margin: 0 auto;
-            padding: 50px 24px;
+            padding: 60px 24px 100px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Glassmorphism Header with Glowing Frame */
+        /* Cyber Glass Header */
         header {
-            background: var(--card-glass);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 45px 30px;
+            background: var(--glass-panel);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 50px 30px;
             text-align: center;
             margin-bottom: 35px;
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 242, 254, 0.08);
             position: relative;
             overflow: hidden;
         }
 
-        header::after {
+        header::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
-            width: 50%;
+            width: 60%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
-            animation: scanline 4s linear infinite;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: radar-sweep 4s linear infinite;
         }
 
-        @keyframes scanline {
-            0% { left: -50%; }
-            100% { left: 150%; }
+        @keyframes radar-sweep {
+            0% { left: -60%; }
+            100% { left: 160%; }
         }
 
-        .status-badge {
+        .radar-beacon {
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 6px 16px;
+            padding: 6px 18px;
             background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 30px;
-            color: var(--cyber-green);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 50px;
+            color: var(--neon-green);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
-            font-family: 'Fira Code', monospace;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
         }
 
-        .pulse-dot {
+        .beacon-light {
             width: 8px;
             height: 8px;
-            background: var(--cyber-green);
+            background: var(--neon-green);
             border-radius: 50%;
-            box-shadow: 0 0 12px var(--cyber-green);
-            animation: blink 1.8s infinite;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: pulse 1.6s infinite alternate;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
+        @keyframes pulse {
+            0% { transform: scale(0.85); opacity: 0.4; }
+            100% { transform: scale(1.3); opacity: 1; }
         }
 
         h1 {
-            font-size: 3.2rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
+            font-size: 3.6rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 25%, #38bdf8 65%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-family: 'Fira Code', monospace;
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-dim);
+            font-size: 1.15rem;
         }
 
-        .cursor {
-            display: inline-block;
-            background: var(--cyber-cyan);
-            width: 8px;
-            height: 18px;
-            vertical-align: middle;
-            animation: blink 1s infinite;
+        /* Glassmorphism Sections */
+        .glass-card {
+            background: var(--glass-panel);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 34px;
+            margin-bottom: 28px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Sections */
-        .section {
-            background: var(--card-glass);
-            border: 1px solid var(--card-border);
-            backdrop-filter: blur(14px);
-            border-radius: 18px;
-            padding: 32px;
-            margin-bottom: 30px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .section:hover {
-            border-color: rgba(6, 182, 212, 0.35);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.45);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.15);
         }
 
         h2 {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.3rem;
-            color: var(--cyber-cyan);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            color: var(--neon-cyan);
             margin-bottom: 22px;
             display: flex;
             align-items: center;
             gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
         }
 
         h2::before {
-            content: '>';
-            color: var(--cyber-purple);
+            content: '//';
+            color: var(--neon-purple);
             font-weight: 700;
         }
 
-        /* Capability List */
-        .spec-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-        .spec-list li {
-            padding-left: 28px;
-            position: relative;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-        }
-        .spec-list li::before {
-            content: '✦';
-            position: absolute;
-            left: 0;
-            color: var(--cyber-cyan);
-            font-size: 0.9rem;
-            top: 2px;
+        .capability-grid {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
 
-        /* Tags */
-        .tags { display: flex; flex-wrap: wrap; gap: 10px; }
-        .tag {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 7px 16px;
+        .capability-grid li {
+            padding-left: 28px;
+            position: relative;
+            color: #e2e8f0;
+            font-size: 0.98rem;
+            line-height: 1.6;
+        }
+
+        .capability-grid li::before {
+            content: '⚡';
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--neon-cyan);
+        }
+
+        /* Tech Cluster */
+        .badge-cluster {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .badge {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 8px 18px;
             border-radius: 10px;
-            font-family: 'Fira Code', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
             color: #cbd5e1;
             transition: all 0.25s;
         }
-        .tag:hover {
-            border-color: var(--cyber-cyan);
-            color: var(--cyber-cyan);
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+
+        .badge:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
             transform: translateY(-2px);
         }
-        .tag.highlight {
-            background: rgba(6, 182, 212, 0.12);
-            border-color: rgba(6, 182, 212, 0.4);
-            color: var(--cyber-cyan);
+
+        .badge.highlight {
+            background: rgba(0, 242, 254, 0.12);
+            border-color: rgba(0, 242, 254, 0.4);
+            color: var(--neon-cyan);
         }
 
-        /* Projects Grid with Interactive Glow Cards */
-        .grid {
+        /* Projects Grid */
+        .projects-wrapper {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 22px;
         }
 
-        .card {
-            background: rgba(15, 23, 42, 0.75);
+        .project-tile {
+            background: rgba(10, 15, 30, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px;
-            padding: 24px;
+            border-radius: 16px;
+            padding: 26px;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card::before {
+        .project-tile::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
             opacity: 0;
             transition: opacity 0.3s;
         }
 
-        .card:hover {
+        .project-tile:hover {
+            border-color: var(--neon-cyan);
             transform: translateY(-5px);
-            border-color: rgba(6, 182, 212, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
         }
 
-        .card:hover::before { opacity: 1; }
+        .project-tile:hover::after { opacity: 1; }
 
-        .card h3 {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.15rem;
+        .project-tile h3 {
+            font-size: 1.25rem;
             margin-bottom: 12px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .card h3 a {
+        .project-tile h3 a {
             color: #ffffff;
             text-decoration: none;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
-        .card h3 a:hover { color: var(--cyber-cyan); }
+        .project-tile h3 a:hover { color: var(--neon-cyan); }
 
-        .card p {
-            font-size: 0.92rem;
-            color: var(--text-secondary);
+        .project-tile p {
+            color: var(--text-dim);
+            font-size: 0.93rem;
             line-height: 1.6;
         }
 
         /* Contact Details */
-        .contact-box p {
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
+        .contact-entry p {
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 14px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .contact-box a {
-            color: var(--cyber-cyan);
+
+        .contact-entry a {
+            color: var(--neon-cyan);
             text-decoration: none;
-            transition: color 0.2s;
+            transition: all 0.2s;
         }
-        .contact-box a:hover {
+
+        .contact-entry a:hover {
             color: #ffffff;
-            text-shadow: 0 0 10px var(--cyber-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
 
         footer {
             text-align: center;
-            color: var(--text-secondary);
-            font-family: 'Fira Code', monospace;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
-            padding-top: 20px;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Particle Grid Background -->
-    <canvas id="cyber-canvas"></canvas>
+    <!-- 3D Three.js Wave Canvas -->
+    <canvas id="webgl-bg"></canvas>
     
-    <!-- Cursor Interactive Spotlight -->
+    <!-- Dynamic Spotlight -->
     <div class="spotlight" id="spotlight"></div>
 
     <div class="container">
         <header>
-            <div class="status-badge"><div class="pulse-dot"></div> SYSTEM STATUS: ACTIVE / MONITORING THREATS</div>
+            <div class="radar-beacon"><div class="beacon-light"></div> SYSTEM STATUS: ACTIVE / MONITORING THREATS</div>
             <h1>Vadla Abhishek</h1>
-            <p class="subtitle">Threat Intelligence Specialist & Detection Engineer<span class="cursor"></span></p>
+            <p class="subtitle">Threat Intelligence Specialist & Detection Engineer</p>
         </header>
 
-        <div class="section">
+        <div class="glass-card">
             <h2>Specialization Overview</h2>
-            <p style="color: var(--text-secondary); font-size: 1.05rem;">
-                Cyber Threat Intelligence (CTI) Practitioner specializing in adversary campaign tracking, ransomware actor profiling, and static malware triage. Builds deterministic analysis engines and automated agentic threat workflows to accelerate incident response and neutralize adversary dwell time.
+            <p style="color: var(--text-dim); font-size: 1.05rem; line-height: 1.8;">
+                Cyber Threat Intelligence (CTI) Practitioner specializing in global breach tracking, ransomware actor profiling, and malware triage. Leverages modern Agentic AI workflows and deterministic static analysis engines to automate threat intelligence pipelines and incident response triage.
             </p>
         </div>
 
-        <div class="section">
+        <div class="glass-card">
             <h2>Core Technical Capabilities</h2>
-            <ul class="spec-list">
-                <li><strong>Static PE Analysis & Triage:</strong> Parsing PE structures, section-level Shannon entropy calculations, and Windows API import heuristics.</li>
-                <li><strong>Threat Actor & Ransomware Profiling:</strong> Deep-dive analysis of adversary tactics, techniques, and procedures (TTPs) mapped to the MITRE ATT&CK framework.</li>
+            <ul class="capability-grid">
+                <li><strong>Offline Static PE Analysis:</strong> Structural analysis, section-level Shannon entropy calculations, and Windows API import heuristics.</li>
+                <li><strong>Threat Actor & Ransomware Profiling:</strong> Deep-dive analysis of adversary tactics, techniques, and procedures (TTPs) mapped to MITRE ATT&CK.</li>
                 <li><strong>IOC & Infrastructure Mapping:</strong> Extracting Indicators of Compromise (Hashes, IPs, C2 Domains) and tracing malicious hosting infrastructure.</li>
                 <li><strong>Detection Engineering & Rules:</strong> Correlating process injection primitives, anti-analysis evasion hooks, and automated triage scoring matrices.</li>
                 <li><strong>Agentic Automation:</strong> Building autonomous AI pipelines to parse security telemetry, normalize feeds, and draft intelligence alerts.</li>
             </ul>
         </div>
 
-        <div class="section">
+        <div class="glass-card">
             <h2>Intelligence Stack & Frameworks</h2>
-            <div class="tags">
-                <span class="tag highlight">Static PE Analysis</span>
-                <span class="tag highlight">MITRE ATT&CK</span>
-                <span class="tag highlight">Ransomware Heuristics</span>
-                <span class="tag highlight">Shannon Entropy Engine</span>
-                <span class="tag">Python Threat Scripting</span>
-                <span class="tag">Threat Actor Profiling</span>
-                <span class="tag">IOC Normalization</span>
-                <span class="tag">Agentic AI Pipelines</span>
-                <span class="tag">C2 Infrastructure Triage</span>
+            <div class="badge-cluster">
+                <span class="badge highlight">Static PE Analysis</span>
+                <span class="badge highlight">MITRE ATT&CK</span>
+                <span class="badge highlight">Ransomware Heuristics</span>
+                <span class="badge highlight">Shannon Entropy Engine</span>
+                <span class="badge">Python Threat Scripting</span>
+                <span class="badge">Threat Actor Profiling</span>
+                <span class="badge">IOC Normalization</span>
+                <span class="badge">Agentic AI Pipelines</span>
+                <span class="badge">C2 Infrastructure Triage</span>
             </div>
         </div>
 
-        <div class="section">
+        <div class="glass-card">
             <h2>Key Intelligence Projects</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3><a href="https://github.com/vadla-abhishek/RansomTrace" target="_blank">RansomTrace Engine <span>↗</span></a></h3>
-                    <p>Production-grade offline static PE analysis & ransomware indicator detection engine correlating high-risk APIs, binary entropy, and MITRE ATT&CK mappings without external cloud APIs.</p>
+            <div class="projects-wrapper">
+                <div class="project-tile">
+                    <h3><a href="https://github.com/vadla-abhishek/RansomTrace" target="_blank">RansomTrace Engine ↗</a></h3>
+                    <p>Production-grade offline static PE analysis & ransomware indicator triage engine mapping binary entropy and malicious Windows API primitives without cloud API dependencies.</p>
                 </div>
-                <div class="card">
-                    <h3><a>Global Breach & GEO Radar</a></h3>
-                    <p>Automated threat intelligence tracking platform identifying high-profile breach incidents, victimology patterns, and geopolitical threat actor campaign trends.</p>
+                <div class="project-tile">
+                    <h3><a>Global Breach Radar ↗</a></h3>
+                    <p>Automated threat intelligence tracking platform identifying high-profile breach incidents, victimology patterns, and geopolitical targeting trends.</p>
                 </div>
-                <div class="card">
-                    <h3><a>AntiGravity Agentic Intel Engine</a></h3>
-                    <p>Custom agentic automation pipeline utilizing AI workflows to parse threat feeds, format IOC lists, and synthesize structured incident telemetry on the fly.</p>
+                <div class="project-tile">
+                    <h3><a>AntiGravity Agentic Intel Engine ↗</a></h3>
+                    <p>Custom agentic automation pipeline utilizing AI workflows to parse threat feeds, format IOC lists, and modify dataset structures on the fly.</p>
                 </div>
             </div>
         </div>
 
-        <div class="section contact-box">
+        <div class="glass-card contact-entry">
             <h2>Initiate Contact</h2>
             <p>GitHub: <a href="https://github.com/vadla-abhishek" target="_blank">github.com/vadla-abhishek</a></p>
-            <p>LinkedIn: <a href="https://linkedin.com" target="_blank">linkedin.com/in/your-profile</a></p>
-            <p>Secure Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+            <p>LinkedIn: <a href="https://linkedin.com" target="_blank">linkedin.com/in/vadla-abhishek</a></p>
+            <p>Secure Email: <a href="mailto:vadla.abhiram@gmail.com">vadla.abhiram@gmail.com</a></p>
         </div>
 
         <footer>
-            <p>[ SECURED BY GITHUB PAGES ] // VADLA ABHISHEK THREAT INTEL RADAR</p>
+            <p>[ SECURED BY GITHUB PAGES ] // VADLA ABHISHEK THREAT INTEL PORTFOLIO</p>
         </footer>
     </div>
 
-    <!-- Interactive Canvas & Spotlight Script -->
+    <!-- 3D Three.js Animated Dynamic Mesh & Spotlight Script -->
     <script>
-        // Spotlight follow
+        // Spotlight Follow Cursor
         const spotlight = document.getElementById('spotlight');
         window.addEventListener('mousemove', (e) => {
             spotlight.style.left = e.clientX + 'px';
             spotlight.style.top = e.clientY + 'px';
         });
 
-        // Cyber Grid Nodes Canvas
-        const canvas = document.getElementById('cyber-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
+        // Three.js 3D Wireframe Plane
+        const canvas = document.getElementById('webgl-bg');
+        const scene = new THREE.Scene();
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 16, 32);
+        camera.rotation.x = -0.52;
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.radius = Math.random() * 1.5 + 0.5;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(6, 182, 212, 0.4)';
-                ctx.fill();
-            }
-        }
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        for (let i = 0; i < 45; i++) {
-            particles.push(new Particle());
-        }
+        const planeGeo = new THREE.PlaneGeometry(125, 125, 48, 48);
+        const planeMat = new THREE.MeshBasicMaterial({
+            color: 0x00f2fe,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.18
+        });
 
+        const plane = new THREE.Mesh(planeGeo, planeMat);
+        plane.rotation.x = -Math.PI / 2;
+        scene.add(plane);
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 4;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 4;
+        });
+
+        let clock = new THREE.Clock();
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
+            const time = clock.getElapsedTime() * 0.75;
+            const pos = planeGeo.attributes.position;
 
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < 130) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(6, 182, 212, ${0.15 * (1 - dist / 130)})`;
-                        ctx.lineWidth = 0.8;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
+            for (let i = 0; i < pos.count; i++) {
+                const u = pos.getX(i);
+                const v = pos.getY(i);
+                const z = Math.sin(u * 0.14 + time) * 3.2 + Math.cos(v * 0.14 + time) * 3.2;
+                pos.setZ(i, z);
             }
+            pos.needsUpdate = true;
+
+            camera.position.x += (mouseX - camera.position.x) * 0.03;
+            camera.position.y += (-mouseY + 16 - camera.position.y) * 0.03;
+
+            renderer.render(scene, camera);
             requestAnimationFrame(animate);
         }
         animate();

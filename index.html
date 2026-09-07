@@ -3,149 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abhi | Cyber Threat Intelligence & Agentic AI Specialist</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Vadla Abhishek | Threat Intelligence & Detection Engineering</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #030712;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --border-color: rgba(55, 65, 81, 0.6);
-            --accent-cyan: #06b6d4;
-            --accent-green: #10b981;
-            --accent-purple: #8b5cf6;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
+            --bg-base: #020617;
+            --cyber-cyan: #06b6d4;
+            --cyber-blue: #3b82f6;
+            --cyber-purple: #8b5cf6;
+            --cyber-green: #10b981;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --card-glass: rgba(15, 23, 42, 0.65);
+            --card-border: rgba(56, 189, 248, 0.15);
+            --glow: rgba(6, 182, 212, 0.35);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
             line-height: 1.6;
-            padding: 20px;
-            background-image: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15), transparent 40%);
+            position: relative;
         }
 
-        .container { max-width: 950px; margin: 40px auto; }
-        
+        /* Interactive Matrix/Grid Canvas */
+        #cyber-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Dynamic Cursor Spotlight Effect */
+        .spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: -1;
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 50px 24px;
+        }
+
+        /* Glassmorphism Header with Glowing Frame */
         header {
+            background: var(--card-glass);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 45px 30px;
             text-align: center;
-            padding: 40px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            backdrop-filter: blur(12px);
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 35px;
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+            animation: scanline 4s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { left: -50%; }
+            100% { left: 150%; }
         }
 
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 6px 16px;
             background: rgba(16, 185, 129, 0.1);
-            color: var(--accent-green);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 4px 12px;
-            border-radius: 20px;
+            border-radius: 30px;
+            color: var(--cyber-green);
             font-size: 0.8rem;
             font-family: 'Fira Code', monospace;
-            margin-bottom: 15px;
-        }
-        .pulse { width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 10px var(--accent-green); }
-
-        h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p.subtitle { font-size: 1.15rem; color: var(--text-muted); font-family: 'Fira Code', monospace; }
-
-        .section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(8px);
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        h2 { font-size: 1.4rem; color: var(--accent-cyan); margin-bottom: 20px; font-family: 'Fira Code', monospace; display: flex; align-items: center; gap: 10px; }
-        h2::before { content: '>'; color: var(--accent-purple); font-weight: bold; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-
-        .card {
-            background: rgba(31, 41, 55, 0.5);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--cyber-green);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--cyber-green);
+            animation: blink 1.8s infinite;
         }
-        .card:hover { border-color: var(--accent-cyan); transform: translateY(-3px); }
-        .card h3 { color: #ffffff; font-size: 1.1rem; margin-bottom: 10px; font-family: 'Fira Code', monospace; }
-        .card p { font-size: 0.92rem; color: var(--text-muted); }
 
-        .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .tag {
-            background: rgba(139, 92, 246, 0.15);
-            color: #c084fc;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
             font-family: 'Fira Code', monospace;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .cursor {
+            display: inline-block;
+            background: var(--cyber-cyan);
+            width: 8px;
+            height: 18px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--card-glass);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 30px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .section:hover {
+            border-color: rgba(6, 182, 212, 0.35);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h2 {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.3rem;
+            color: var(--cyber-cyan);
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: '>';
+            color: var(--cyber-purple);
+            font-weight: 700;
+        }
+
+        /* Capability List */
+        .spec-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .spec-list li {
+            padding-left: 28px;
+            position: relative;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        .spec-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--cyber-cyan);
+            font-size: 0.9rem;
+            top: 2px;
+        }
+
+        /* Tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 7px 16px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            transition: all 0.25s;
+        }
+        .tag:hover {
+            border-color: var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+            transform: translateY(-2px);
         }
         .tag.highlight {
-            background: rgba(6, 182, 212, 0.15);
-            color: var(--accent-cyan);
-            border-color: rgba(6, 182, 212, 0.3);
+            background: rgba(6, 182, 212, 0.12);
+            border-color: rgba(6, 182, 212, 0.4);
+            color: var(--cyber-cyan);
         }
 
-        .spec-list { list-style: none; }
-        .spec-list li { margin-bottom: 12px; padding-left: 20px; position: relative; color: var(--text-main); }
-        .spec-list li::before { content: '⚡'; position: absolute; left: 0; font-size: 0.8rem; top: 3px; }
+        /* Projects Grid with Interactive Glow Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 22px;
+        }
 
-        a { color: var(--accent-cyan); text-decoration: none; font-family: 'Fira Code', monospace; }
-        a:hover { text-decoration: underline; }
+        .card {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        footer { text-align: center; color: var(--text-muted); margin-top: 40px; font-size: 0.85rem; font-family: 'Fira Code', monospace; }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyber-cyan), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.15);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card h3 {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+        }
+
+        .card h3 a {
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card h3 a:hover { color: var(--cyber-cyan); }
+
+        .card p {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Contact Details */
+        .contact-box p {
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        .contact-box a {
+            color: var(--cyber-cyan);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .contact-box a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--cyber-cyan);
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Particle Grid Background -->
+    <canvas id="cyber-canvas"></canvas>
+    
+    <!-- Cursor Interactive Spotlight -->
+    <div class="spotlight" id="spotlight"></div>
+
     <div class="container">
         <header>
-            <div class="status-badge"><div class="pulse"></div> SYSTEM STATUS: ACTIVE / MONITORING THREATS</div>
-            <h1>Abhi</h1>
-            <p class="subtitle">Threat Intelligence Specialist & Agentic AI Workflow Architect</p>
+            <div class="status-badge"><div class="pulse-dot"></div> SYSTEM STATUS: ACTIVE / MONITORING THREATS</div>
+            <h1>Vadla Abhishek</h1>
+            <p class="subtitle">Threat Intelligence Specialist & Detection Engineer<span class="cursor"></span></p>
         </header>
 
         <div class="section">
             <h2>Specialization Overview</h2>
-            <p>Cyber Threat Intelligence (CTI) Practitioner specializing in global breach tracking, ransomware actor profiling, and threat infrastructure mapping. Leverages modern Agentic AI platforms (including <strong>AntiGravity</strong>) to automate threat intelligence workflows, execute agent-driven file/dataset modifications, and create high-impact technical & security marketing content.</p>
+            <p style="color: var(--text-secondary); font-size: 1.05rem;">
+                Cyber Threat Intelligence (CTI) Practitioner specializing in adversary campaign tracking, ransomware actor profiling, and static malware triage. Builds deterministic analysis engines and automated agentic threat workflows to accelerate incident response and neutralize adversary dwell time.
+            </p>
         </div>
 
         <div class="section">
             <h2>Core Technical Capabilities</h2>
             <ul class="spec-list">
-                <li><strong>Global Breach Detection & Geo Analysis:</strong> Identifying compromised databases, attribution to specific threat origins, and country-level breach impact mapping.</li>
-                <li><strong>Threat Actor & Ransomware Profiling:</strong> Deep-dive analysis of threat actor tactics, techniques, and procedures (TTPs), threat groups, and operational patterns.</li>
-                <li><strong>IOC & Infrastructure Mapping:</strong> Extracting Indicators of Compromise (IPs, Hashes, C2 Domains) and mapping malicious operational infrastructures.</li>
-                <li><strong>Agentic Workflows via AntiGravity:</strong> Building autonomous AI agents for file manipulation, structural context updates, and automated OSINT compilation.</li>
-                <li><strong>AI Brand Asset & Technical Content Creation:</strong> Generating high-fidelity visual assets, analytical reports, and promotional materials for security marketing.</li>
+                <li><strong>Static PE Analysis & Triage:</strong> Parsing PE structures, section-level Shannon entropy calculations, and Windows API import heuristics.</li>
+                <li><strong>Threat Actor & Ransomware Profiling:</strong> Deep-dive analysis of adversary tactics, techniques, and procedures (TTPs) mapped to the MITRE ATT&CK framework.</li>
+                <li><strong>IOC & Infrastructure Mapping:</strong> Extracting Indicators of Compromise (Hashes, IPs, C2 Domains) and tracing malicious hosting infrastructure.</li>
+                <li><strong>Detection Engineering & Rules:</strong> Correlating process injection primitives, anti-analysis evasion hooks, and automated triage scoring matrices.</li>
+                <li><strong>Agentic Automation:</strong> Building autonomous AI pipelines to parse security telemetry, normalize feeds, and draft intelligence alerts.</li>
             </ul>
         </div>
 
         <div class="section">
             <h2>Intelligence Stack & Frameworks</h2>
             <div class="tags">
-                <span class="tag highlight">AntiGravity AI</span>
-                <span class="tag highlight">Threat Actor Profiling</span>
-                <span class="tag highlight">Ransomware Tracking</span>
-                <span class="tag">Global Breach OSINT</span>
-                <span class="tag">IOC Extraction</span>
-                <span class="tag">C2 Infrastructure Analysis</span>
-                <span class="tag">Agentic File Modification</span>
-                <span class="tag">Security Marketing Content</span>
-                <span class="tag">MITRE ATT&CK</span>
+                <span class="tag highlight">Static PE Analysis</span>
+                <span class="tag highlight">MITRE ATT&CK</span>
+                <span class="tag highlight">Ransomware Heuristics</span>
+                <span class="tag highlight">Shannon Entropy Engine</span>
+                <span class="tag">Python Threat Scripting</span>
+                <span class="tag">Threat Actor Profiling</span>
+                <span class="tag">IOC Normalization</span>
+                <span class="tag">Agentic AI Pipelines</span>
+                <span class="tag">C2 Infrastructure Triage</span>
             </div>
         </div>
 
@@ -153,31 +357,105 @@
             <h2>Key Intelligence Projects</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>Global Breach & GEO Radar</h3>
-                    <p>Automated intelligence tracking platform identifying high-profile breach incidents, victimology, and geographical targeting trends.</p>
+                    <h3><a href="https://github.com/vadla-abhishek/RansomTrace" target="_blank">RansomTrace Engine <span>↗</span></a></h3>
+                    <p>Production-grade offline static PE analysis & ransomware indicator detection engine correlating high-risk APIs, binary entropy, and MITRE ATT&CK mappings without external cloud APIs.</p>
                 </div>
                 <div class="card">
-                    <h3>AntiGravity Agentic Intel Engine</h3>
-                    <p>Custom agentic automation pipeline utilizing AntiGravity to parse threat feeds, format IOC lists, and modify dataset structures on the fly.</p>
+                    <h3><a>Global Breach & GEO Radar</a></h3>
+                    <p>Automated threat intelligence tracking platform identifying high-profile breach incidents, victimology patterns, and geopolitical threat actor campaign trends.</p>
                 </div>
                 <div class="card">
-                    <h3>Ransomware Profiling Matrix</h3>
-                    <p>Comprehensive repository detailing active ransomware cartels, victim negotiation techniques, and C2 server maps.</p>
+                    <h3><a>AntiGravity Agentic Intel Engine</a></h3>
+                    <p>Custom agentic automation pipeline utilizing AI workflows to parse threat feeds, format IOC lists, and synthesize structured incident telemetry on the fly.</p>
                 </div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section contact-box">
             <h2>Initiate Contact</h2>
-            <p>GitHub: <a href="https://github.com/Abhi2477" target="_blank">github.com/Abhi2477</a></p>
-            <p>LinkedIn: <a href="https://linkedin.com" target="_blank">linkedin.com/in/profile</a></p>
+            <p>GitHub: <a href="https://github.com/vadla-abhishek" target="_blank">github.com/vadla-abhishek</a></p>
+            <p>LinkedIn: <a href="https://linkedin.com" target="_blank">linkedin.com/in/your-profile</a></p>
             <p>Secure Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
         </div>
 
         <footer>
-            <p>[ SECURED BY GITHUB PAGES ] // ABHI THREAT INTEL PORTFOLIO</p>
+            <p>[ SECURED BY GITHUB PAGES ] // VADLA ABHISHEK THREAT INTEL RADAR</p>
         </footer>
     </div>
 
+    <!-- Interactive Canvas & Spotlight Script -->
+    <script>
+        // Spotlight follow
+        const spotlight = document.getElementById('spotlight');
+        window.addEventListener('mousemove', (e) => {
+            spotlight.style.left = e.clientX + 'px';
+            spotlight.style.top = e.clientY + 'px';
+        });
+
+        // Cyber Grid Nodes Canvas
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(6, 182, 212, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 130) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(6, 182, 212, ${0.15 * (1 - dist / 130)})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
